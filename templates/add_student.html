@@ -38,6 +38,7 @@
     }
 </style>
 
+<br>
 <form method="post">
     <h2>Add Student</h2>
     {% csrf_token %}
@@ -50,11 +51,11 @@
         {{ form.registration_date }}
     </div>
     <div class="form-group">
-        <label for="id_monthly_fee">Monthly Fee:</label>
+        <label for="id_monthly_fee">Monthly:</label>
         {{ form.months_duration }}
     </div>
     <div class="form-group">
-        <label for="id_student_fee">Student Fee:</label>
+        <label for="id_student_fee">Trainer:</label>
         {{ form.trainer }}
     </div>
     <button type="submit">Save</button>
