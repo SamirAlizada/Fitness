@@ -11,8 +11,8 @@ class MonthlyPricing(models.Model):
 class Trainer(models.Model):
     full_name = models.CharField(max_length=100)
     registration_date = models.DateField(default=timezone.now)
-    monthly_fee = models.FloatField()
-    student_fee = models.FloatField()
+    monthly_fee = models.IntegerField()
+    student_fee = models.IntegerField()
 
     def __str__(self) -> str:
         return f"{self.full_name}"
@@ -27,3 +27,11 @@ class Student(models.Model):
 
     def __str__(self) -> str:
         return f"{self.full_name}"
+
+class Bar(models.Model):
+    product_name = models.CharField(max_length=100)
+    price = models.FloatField()
+    stock_number = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f"{self.product_name}"

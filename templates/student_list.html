@@ -1,0 +1,12 @@
+{% include "index.html" %}
+
+{% block content %}
+
+<h2>Student List</h2>
+    <ul>
+        {% for student in students %}
+            <li>{{ student.full_name }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock content %}
