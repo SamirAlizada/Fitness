@@ -32,26 +32,29 @@ def add_trainer(request):
         form = TrainerForm()
     return render(request, 'add_trainer.html', {'form': form})
 
-# def all_list(request):
-#     category = request.GET.get('category')
-#     if category == 'trainer':
-#         data = trainer_list()
-#     elif category == 'student':
-#         data = student_list()
-#     # elif category == 'bar':
-#     #     data = bar_list()
-#     else:
-#         data = None 
-#     return render(request, 'all_list.html', {'data': data})
-
 def trainer_list(request):
     trainers = Trainer.objects.all()
+
+    query = request.GET.get('q')
+    if query:
+        trainers = trainers.filter(full_name__icontains=query)
+
     return render(request, 'trainer_list.html', {'trainers': trainers})
 
 def student_list(request):
     students = Student.objects.all()
+
+    query = request.GET.get('q')
+    if query:
+        students = students.filter(full_name__icontains=query)
+
     return render(request, 'student_list.html', {'students': students})
 
 def bar_list(request):
     bars = Bar.objects.all()
+
+    query = request.GET.get('q')
+    if query:
+        bars = bars.filter(product_name__icontains=query)
+
     return render(request, 'bar_list.html', {'bars': bars})
