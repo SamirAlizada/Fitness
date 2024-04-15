@@ -45,7 +45,7 @@
 
 <br>
 <form method="post">
-    <h2>Add Trainer</h2>
+    <h2>Add Months Duration</h2>
     {% csrf_token %}
     <div class="form-group">
         <label for="id_full_name">Mounth:</label>
@@ -55,6 +55,6 @@
         <label for="id_registration_date">Price:</label>
         {{ form.price }}
     </div>
-    <button type="submit">Save</button>
+    <button type="submit">Add</button>
 </form>
 {% endblock content %}
