@@ -1,0 +1,46 @@
+{% include "index.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Trainer List</h2>
+    <form method="GET" class="mb-3">
+        <div class="form-inline mb-4">
+            <input type="text" name="q" class="form-control mr-sm-2" placeholder="Axtarış adını daxil edin">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Axtar</button>
+            &nbsp;
+            <a href="{% url 'trainer_list' %}"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Sıfırla</button>
+            </a>
+        </div>
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Full Name</th>
+                <th scope="col">Registration Date</th>
+                <th scope="col">Monthly Fee</th>
+                <th scope="col">Student Fee</th>
+                <th scope="col">Operations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trainer in trainers %}
+            <tr>
+                <td>{{ trainer.full_name }}</td>
+                <td>{{ trainer.registration_date|date:"d/m/Y" }}</td>
+                <td>{{ trainer.monthly_fee }}</td>
+                <td>{{ trainer.student_fee }}</td>
+                <td>
+                    <a href="{% url 'update_trainer' trainer.pk %}" class="btn btn-sm btn-info">Edit</a>
+                    <a href="{% url 'delete_trainer' trainer.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<br>
+<br>
+
+{% endblock content %}
