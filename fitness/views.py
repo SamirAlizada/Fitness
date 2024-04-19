@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import StudentForm, TrainerForm, MonthlyPricingForm, BarForm
 from .models import Student, Trainer, Bar
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+
 
 # Add
 def add_monthlypricing(request):
@@ -153,4 +155,25 @@ def bar_panel(request):
         bars = bars.filter(product_name__icontains=query)
 
     return render(request, 'bar_panel.html', {'bars': bars})
+# ----------------------------------------------------------------
+
+# User
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('student_list')
+        else:
+            messages.error(request, 'Username or password is incorrect.')
+    return render(request, 'account/login.html')
+
+def user_logout(request):
+    logout(request)
+    return redirect('student_list')
+
+def about(request):
+    return render(request, 'about.html')
 # ----------------------------------------------------------------
