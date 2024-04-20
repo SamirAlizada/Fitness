@@ -27,4 +27,7 @@ urlpatterns = [
     path('update-student/', update_student, name='update_student'),
     path('update-bar/', update_bar, name='update_bar'),
 
+    # Account
+    path('login/', user_login, name='login'),
+    path('logout/', user_logout, name='logout'),
 ]
