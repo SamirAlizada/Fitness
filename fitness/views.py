@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import StudentForm, TrainerForm, MonthlyPricingForm, BarForm
-from .models import Student, Trainer, Bar
+from .models import Student, Trainer, Bar, MonthlyPricing
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
@@ -106,26 +106,42 @@ def update_bar(request, pk):
             form.save()
             return redirect('bar_panel')
     return render(request, 'update_bar.html', {'form': form})
+
+def update_monthlypricing(request, pk):
+    monthlypricing = get_object_or_404(MonthlyPricing, pk=pk)
+    form = MonthlyPricingForm(instance=monthlypricing)
+    if request.method == 'POST':
+        form = BarForm(request.POST, instance=monthlypricing)
+        if form.is_valid():
+            form.save()
+            return redirect('monthlypricing_panel')
+    return render(request, 'update_monthlypricing.html', {'form': form})
 # ----------------------------------------------------------------
 
 # Delete
 def delete_trainer(request, pk):
-    trainer = trainer.objects.get(pk=pk)
+    trainer = Trainer.objects.get(pk=pk)
     trainer.delete()
     messages.success(request, 'Trainer deleted successfully.')
     return redirect('trainer_panel')
 
 def delete_student(request, pk):
-    student = student.objects.get(pk=pk)
+    student = Student.objects.get(pk=pk)
     student.delete()
     messages.success(request, 'Student deleted successfully.')
     return redirect('student_panel')
 
 def delete_bar(request, pk):
-    bar = bar.objects.get(pk=pk)
+    bar = Bar.objects.get(pk=pk)
     bar.delete()
     messages.success(request, 'Bar item deleted successfully.')
     return redirect('bar_panel')
+
+def delete_monthlypricing(request, pk):
+    monthlypricing = MonthlyPricing.objects.get(pk=pk)
+    monthlypricing.delete()
+    messages.success(request, 'Monthly Pricing deleted successfully.')
+    return redirect('monthlypricing_panel')
 # ----------------------------------------------------------------
 
 # Panel
@@ -155,6 +171,10 @@ def bar_panel(request):
         bars = bars.filter(product_name__icontains=query)
 
     return render(request, 'bar_panel.html', {'bars': bars})
+
+def monthlypricing_panel(request):
+    monthlypricings = MonthlyPricing.objects.all()
+    return render(request, 'monthlypricing_panel.html', {'monthlypricings': monthlypricings})
 # ----------------------------------------------------------------
 
 # User
