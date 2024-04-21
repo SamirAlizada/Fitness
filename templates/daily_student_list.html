@@ -1,0 +1,48 @@
+{% include "index.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-center">Daily Student List</h2>
+    <h4 class="text-center">
+        ({{ today|date:"d F" }} - {{ today|date:"l" }}) 
+    </h4>
+    <br>
+    <form method="GET" class="mb-3">
+        <div class="form-inline mb-4">
+            <input type="text" name="q" class="form-control mr-sm-2" placeholder="Enter a search name">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+            &nbsp;
+            <a href="{% url 'student_list' %}"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Reset</button>
+            </a>
+        </div>
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Full Name</th>
+                <th scope="col">Registration Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Months Duration</th>
+                <th scope="col">Trainer</th>
+                <th scope="col">Payment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.full_name }}</td>
+                <td>{{ student.registration_date|date:"d/m/Y" }}</td>
+                <td>{{ student.end_date|date:"d/m/Y" }}</td>
+                <td>{{ student.months_duration }}</td>
+                <td>{{ student.trainer }}</td>
+                <td>{{ student.payment }} $</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<br>
+<br>
+{% endblock content %}

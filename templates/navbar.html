@@ -35,9 +35,10 @@
                         <a class="nav-link dropdown-toggle" style="color: aliceblue;" href="#"
                             id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
-                            Cədvəllər
+                            List
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'daily_student_list' %}">Daily</a>
                             <a class="dropdown-item" href="{% url 'bar_list' %}">Bar</a>
                             <a class="dropdown-item" href="{% url 'trainer_list' %}">Trainer</a>
                             <a class="dropdown-item" href="{% url 'student_list' %}">Student</a>
@@ -52,7 +53,7 @@
                         <a class="nav-link dropdown-toggle" style="color: aliceblue;" href="#"
                             id="navbarDropdownMenuLinkk" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
-                            Əlavə Et
+                            Add
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'add_monthlypricing' %}">Mounth</a>
@@ -65,23 +66,23 @@
                         <a class="nav-link dropdown-toggle" style="color: aliceblue;" href="#"
                             id="navbarDropdownMenuLinkkk" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
-                            İdarəetmə Paneli
+                            Panel
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'trainer_panel' %}">Trainer</a>
                             <a class="dropdown-item" href="{% url 'student_panel' %}">Student</a>
                             <a class="dropdown-item" href="{% url 'bar_panel' %}">Bar</a>
-                            <a class="dropdown-item" href="{% url 'monthlypricing_panel' %}">Monthly Pricing</a>
+                            <a class="dropdown-item" href="{% url 'monthlypricing_panel' %}">Monthly Price</a>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" style="color: white;" href="{% url 'logout' %}">Çıxış</a>
+                        <a class="nav-link" style="color: white;" href="{% url 'logout' %}">Logout</a>
                     </li>
                 </ul>
                 {% else %}
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" style="color: white;" href="{% url 'login' %}">Giriş</a>
+                        <a class="nav-link" style="color: white;" href="{% url 'login' %}">Login</a>
                     </li>
                 </ul>
                 {% endif %}
