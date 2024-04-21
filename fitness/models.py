@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 class MonthlyPricing(models.Model):
     month = models.IntegerField()
@@ -23,7 +25,8 @@ class Student(models.Model):
     months_duration = models.ForeignKey(MonthlyPricing, on_delete=models.CASCADE, null=True, blank=True)
     trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, null=True, blank=True)
     payment = models.IntegerField(default=0)
-
+    end_date = models.DateField(null=True, blank=True)
+    
     def calculate_payment(self):
         # Get the price if `months_duration` is selected
         if self.months_duration:
@@ -38,9 +41,15 @@ class Student(models.Model):
         # Update the `payment' field
         self.payment = payment
 
+    def calculate_end_date(self):
+        # Registration_date üzerine months_duration kadar ay ekleyerek end_date hesaplama
+        if self.months_duration:
+            self.end_date = self.registration_date + relativedelta(months=self.months_duration.month)
+
     def save(self, *args, **kwargs):
         # Calculate the payment before saving
         self.calculate_payment()
+        self.calculate_end_date()
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
