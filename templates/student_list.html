@@ -20,6 +20,7 @@
                 <th scope="col">Registration Date</th>
                 <th scope="col">Months Duration</th>
                 <th scope="col">Trainer</th>
+                <th scope="col">Payment</th>
             </tr>
         </thead>
         <tbody>
@@ -29,6 +30,7 @@
                 <td>{{ student.registration_date|date:"d/m/Y" }}</td>
                 <td>{{ student.months_duration }}</td>
                 <td>{{ student.trainer }}</td>
+                <td>{{ student.payment }} $</td>
             </tr>
             {% endfor %}
         </tbody>
