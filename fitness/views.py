@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import StudentForm, TrainerForm, MonthlyPricingForm, BarForm
 from .models import Student, Trainer, Bar, MonthlyPricing
 from django.contrib import messages
-from datetime import datetime
+from datetime import datetime, date
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -65,7 +65,9 @@ def student_list(request):
     if query:
         students = students.filter(full_name__icontains=query)
 
-    return render(request, 'student_list.html', {'students': students})
+    today = date.today()
+
+    return render(request, 'student_list.html', {'students': students, 'today': today})
 
 def daily_student_list(request):
     now = datetime.now()
@@ -174,7 +176,9 @@ def student_panel(request):
     if query:
         students = students.filter(full_name__icontains=query)
 
-    return render(request, 'student_panel.html', {'students': students})
+    today = date.today()
+
+    return render(request, 'student_panel.html', {'students': students, 'today': today})
 
 def bar_panel(request):
     bars = Bar.objects.all()

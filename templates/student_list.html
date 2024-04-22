@@ -2,6 +2,16 @@
 
 {% block content %}
 
+<style>
+    .end-date-today {
+        color: red;
+    }
+
+    .end-date-past {
+        color: grey;
+    }
+</style>
+
 <div class="container mt-5">
     <h2 class="mb-4">Student List</h2>
     <form method="GET" class="mb-3">
@@ -9,7 +19,8 @@
             <input type="text" name="q" class="form-control mr-sm-2" placeholder="Enter a search name">
             <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
             &nbsp;
-            <a href="{% url 'student_list' %}"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Reset</button>
+            <a href="{% url 'student_list' %}"><button class="btn btn-outline-primary my-2 my-sm-0"
+                    type="submit">Reset</button>
             </a>
         </div>
     </form>
@@ -27,7 +38,7 @@
         </thead>
         <tbody>
             {% for student in students %}
-            <tr>
+            <tr class="{% if student.end_date == today %}end-date-today{% elif student.end_date < today %}end-date-past{% endif %}">
                 <td>{{ forloop.counter }}</td>
                 <td>{{ student.full_name }}</td>
                 <td>{{ student.registration_date|date:"d/m/Y" }}</td>
