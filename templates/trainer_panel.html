@@ -13,9 +13,10 @@
             </a>
         </div>
     </form>
-    <table class="table">
+    <table class="table text-center">
         <thead>
             <tr>
+                <th scope="col">№</th>
                 <th scope="col">Full Name</th>
                 <th scope="col">Registration Date</th>
                 <th scope="col">Monthly Fee</th>
@@ -26,6 +27,7 @@
         <tbody>
             {% for trainer in trainers %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ trainer.full_name }}</td>
                 <td>{{ trainer.registration_date|date:"d/m/Y" }}</td>
                 <td>{{ trainer.monthly_fee }}</td>

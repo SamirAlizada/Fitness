@@ -13,9 +13,10 @@
             </a>
         </div>
     </form>
-    <table class="table">
+    <table class="table text-center">
         <thead>
             <tr>
+                <th scope="col">№</th>
                 <th scope="col">Product Name</th>
                 <th scope="col">Price</th>
                 <th scope="col">Stock Number</th>
@@ -25,6 +26,7 @@
         <tbody>
             {% for bar in bars %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ bar.product_name }}</td>
                 <td>{{ bar.price }}</td>
                 <td>{{ bar.stock_number }}</td>

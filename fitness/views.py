@@ -124,7 +124,7 @@ def update_monthlypricing(request, pk):
     monthlypricing = get_object_or_404(MonthlyPricing, pk=pk)
     form = MonthlyPricingForm(instance=monthlypricing)
     if request.method == 'POST':
-        form = BarForm(request.POST, instance=monthlypricing)
+        form = MonthlyPricingForm(request.POST, instance=monthlypricing)
         if form.is_valid():
             form.save()
             return redirect('monthlypricing_panel')

@@ -10,9 +10,9 @@ urlpatterns = [
 
     # List
     path('trainer-list/', trainer_list, name='trainer_list'),
-    path('', student_list, name='student_list'),
+    path('student-list', student_list, name='student_list'),
     path('bar-list/', bar_list, name='bar_list'),
-    path('daily_student_list/', daily_student_list, name='daily_student_list'),
+    path('', daily_student_list, name='daily_student_list'),
 
     # Panel
     path('trainer-panel/', trainer_panel, name='trainer_panel'),
