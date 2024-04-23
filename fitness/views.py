@@ -4,7 +4,8 @@ from .models import Student, Trainer, Bar, MonthlyPricing
 from django.contrib import messages
 from datetime import datetime, date
 from django.contrib.auth import authenticate, login, logout
-
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
 
 # Add
 def add_monthlypricing(request):
@@ -214,3 +215,19 @@ def user_logout(request):
 def about(request):
     return render(request, 'about.html')
 # ----------------------------------------------------------------
+
+def renew_student(request, student_id):
+    # İlgili öğrenciyi bul
+    student = get_object_or_404(Student, id=student_id)
+    
+    # Registration_date'i güncel tarihe ayarla
+    student.registration_date = timezone.now()
+    
+    # end_date'i registration_date'in üzerine ay ekleyerek yenile
+    student.end_date = student.registration_date + relativedelta(months=student.months_duration.month)
+
+    # Değişiklikleri kaydet
+    student.save()
+
+    # Yenilenmiş öğrenciyle ilgili bir sayfaya veya listeleme sayfasına yönlendir
+    return redirect('student_panel')

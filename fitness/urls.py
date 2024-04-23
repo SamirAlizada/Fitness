@@ -35,4 +35,6 @@ urlpatterns = [
     # Account
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
+
+    path('renew-student/<int:student_id>/', renew_student, name='renew_student'),
 ]
