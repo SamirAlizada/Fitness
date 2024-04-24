@@ -47,7 +47,7 @@
                 <td>{{ student.trainer }}</td>
                 <td>{{ student.payment }} $</td>
                 <td>
-                    <a href="{% url 'renew_student' student.pk %}" class="btn btn-sm btn-info">Renew</a>
+                    <a href="{% url 'renew_student' student.pk %}" class="btn btn-sm btn-info" onclick="return confirm('Are you sure you want to renew this student?')">Renew</a>
                     <a href="{% url 'update_student' student.pk %}" class="btn btn-sm btn-info">Edit</a>
                     <a href="{% url 'delete_student' student.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
                 </td>

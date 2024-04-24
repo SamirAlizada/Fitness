@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import StudentForm, TrainerForm, MonthlyPricingForm, BarForm
-from .models import Student, Trainer, Bar, MonthlyPricing
+from .forms import StudentForm, TrainerForm, MonthlyPricingForm, BarForm, BarSoldForm
+from .models import Student, Trainer, Bar, MonthlyPricing, BarSold
 from django.contrib import messages
 from datetime import datetime, date
 from django.contrib.auth import authenticate, login, logout
@@ -47,6 +47,16 @@ def add_bar(request):
     else:
         form = BarForm()
     return render(request, 'add_bar.html', {'form': form})
+
+def add_bar_sold(request):
+    if request.method == 'POST':
+        form = BarSoldForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('add_bar_sold') 
+    else:
+        form = BarSoldForm()
+    return render(request, 'add_bar_sold.html', {'form': form})
 # ----------------------------------------------------------------
 
 #List of classes
@@ -90,6 +100,15 @@ def bar_list(request):
         bars = bars.filter(product_name__icontains=query)
 
     return render(request, 'bar_list.html', {'bars': bars})
+
+def bar_sold_list(request):
+    bar_solds = BarSold.objects.all()
+
+    query = request.GET.get('q')
+    if query:
+        bar_solds = bar_solds.filter(product_name__icontains=query)
+
+    return render(request, 'bar_sold_list.html', {'bar_solds': bar_solds})
 # ----------------------------------------------------------------
 
 # Update
@@ -123,6 +142,16 @@ def update_bar(request, pk):
             return redirect('bar_panel')
     return render(request, 'update_bar.html', {'form': form})
 
+def update_bar_sold(request, pk):
+    bar_sold = get_object_or_404(BarSold, pk=pk)
+    form = BarSoldForm(instance=bar_sold)
+    if request.method == 'POST':
+        form = BarSoldForm(request.POST, instance=bar_sold)
+        if form.is_valid():
+            form.save()
+            return redirect('bar_sold_panel')
+    return render(request, 'update_bar_sold.html', {'form': form})
+
 def update_monthlypricing(request, pk):
     monthlypricing = get_object_or_404(MonthlyPricing, pk=pk)
     form = MonthlyPricingForm(instance=monthlypricing)
@@ -152,6 +181,12 @@ def delete_bar(request, pk):
     bar.delete()
     messages.success(request, 'Bar item deleted successfully.')
     return redirect('bar_panel')
+
+def delete_bar_sold(request, pk):
+    bar_sold = BarSold.objects.get(pk=pk)
+    bar_sold.delete()
+    messages.success(request, 'Bar item deleted successfully.')
+    return redirect('bar_sold_panel')
 
 def delete_monthlypricing(request, pk):
     monthlypricing = MonthlyPricing.objects.get(pk=pk)
@@ -189,6 +224,15 @@ def bar_panel(request):
         bars = bars.filter(product_name__icontains=query)
 
     return render(request, 'bar_panel.html', {'bars': bars})
+
+def bar_sold_panel(request):
+    bar_solds = BarSold.objects.all()
+
+    query = request.GET.get('q')
+    if query:
+        bar_solds = bar_solds.filter(product_name__icontains=query)
+
+    return render(request, 'bar_sold_panel.html', {'bar_solds': bar_solds})
 
 def monthlypricing_panel(request):
     monthlypricings = MonthlyPricing.objects.all()

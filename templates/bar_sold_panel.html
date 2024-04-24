@@ -3,13 +3,13 @@
 {% block content %}
 
 <div class="container mt-5">
-    <h2 class="mb-4">Bar Panel</h2>
+    <h2 class="mb-4">Bar Sold Panel</h2>
     <form method="GET" class="mb-3">
         <div class="form-inline mb-4">
             <input type="text" name="q" class="form-control mr-sm-2" placeholder="Enter a search name">
             <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
             &nbsp;
-            <a href="{% url 'bar_list' %}"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Reset</button>
+            <a href="{% url 'bar_sold_list' %}"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Reset</button>
             </a>
         </div>
     </form>
@@ -19,20 +19,20 @@
                 <th scope="col">№</th>
                 <th scope="col">Product Name</th>
                 <th scope="col">Price</th>
-                <th scope="col">Stock Number</th>
+                <th scope="col">Count</th>
                 <th scope="col">Operations</th>
             </tr>
         </thead>
         <tbody>
-            {% for bar in bars %}
+            {% for bar_sold in bar_solds %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ bar.product_name }}</td>
-                <td>{{ bar.price }}</td>
-                <td>{{ bar.stock_number }}</td>
+                <td>{{ bar_sold.product_name }}</td>
+                <td>{{ bar_sold.price }} $</td>
+                <td>{{ bar_sold.count }}</td>
                 <td>
-                    <a href="{% url 'update_bar' bar.pk %}" class="btn btn-sm btn-info">Edit</a>
-                    <a href="{% url 'delete_bar' bar.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this bar item?')">Delete</a>
+                    <a href="{% url 'update_bar_sold' bar_sold.pk %}" class="btn btn-sm btn-info">Edit</a>
+                    <a href="{% url 'delete_bar_sold' bar_sold.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this bar item?')">Delete</a>
                 </td>
             </tr>
             {% endfor %}

@@ -39,7 +39,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'daily_student_list' %}">Daily</a>
-                            <a class="dropdown-item" href="{% url 'bar_list' %}">Bar</a>
+                            <a class="dropdown-item" href="{% url 'bar_list' %}">Bar Stock</a>
+                            <a class="dropdown-item" href="{% url 'bar_sold_list' %}">Bar Sold</a>
                             <a class="dropdown-item" href="{% url 'trainer_list' %}">Trainer</a>
                             <a class="dropdown-item" href="{% url 'student_list' %}">Student</a>
                         </div>
@@ -59,7 +60,8 @@
                             <a class="dropdown-item" href="{% url 'add_monthlypricing' %}">Mounth</a>
                             <a class="dropdown-item" href="{% url 'add_trainer' %}">Trainer</a>
                             <a class="dropdown-item" href="{% url 'add_student' %}">Student</a>
-                            <a class="dropdown-item" href="{% url 'add_bar' %}">Bar</a>
+                            <a class="dropdown-item" href="{% url 'add_bar' %}">Bar Stock</a>
+                            <a class="dropdown-item" href="{% url 'add_bar_sold' %}">Bar Sold</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -72,6 +74,7 @@
                             <a class="dropdown-item" href="{% url 'trainer_panel' %}">Trainer</a>
                             <a class="dropdown-item" href="{% url 'student_panel' %}">Student</a>
                             <a class="dropdown-item" href="{% url 'bar_panel' %}">Bar</a>
+                            <a class="dropdown-item" href="{% url 'bar_sold_panel' %}">Bar Sold</a>
                             <a class="dropdown-item" href="{% url 'monthlypricing_panel' %}">Monthly Price</a>
                         </div>
                     </li>

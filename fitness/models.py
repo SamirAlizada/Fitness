@@ -34,9 +34,9 @@ class Student(models.Model):
         else:
             payment = 0.0
 
-        # If a trainer is selected, add the trainer's student_fee
+        # If an instructor is selected, multiply the instructor's student_fee by `months_duration'
         if self.trainer:
-            payment += self.trainer.student_fee
+            payment += self.trainer.student_fee * self.months_duration.month
 
         # Update the `payment' field
         self.payment = payment
@@ -59,6 +59,14 @@ class Bar(models.Model):
     product_name = models.CharField(max_length=100)
     price = models.FloatField()
     stock_number = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f"{self.product_name}"
+    
+class BarSold(models.Model):
+    product_name = models.ForeignKey(Bar, on_delete=models.CASCADE, null=True, blank=True)
+    price = models.FloatField()
+    count = models.IntegerField()
 
     def __str__(self) -> str:
         return f"{self.product_name}"
