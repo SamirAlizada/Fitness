@@ -3,11 +3,12 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
 class MonthlyPricing(models.Model):
+    name = models.CharField(max_length=30, null=True)
     month = models.IntegerField()
     price = models.IntegerField()
 
     def __str__(self) -> str:
-        return f"{self.month}"
+        return f"{self.name}"
 
 class Trainer(models.Model):
     full_name = models.CharField(max_length=100)

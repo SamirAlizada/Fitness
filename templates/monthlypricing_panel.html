@@ -8,6 +8,7 @@
         <thead>
             <tr>
                 <th scope="col">№</th>
+                <th scope="col">Name</th>
                 <th scope="col">Month</th>
                 <th scope="col">Price</th>
                 <th scope="col">Operations</th>
@@ -17,6 +18,7 @@
             {% for monthlypricing in monthlypricings %}
             <tr>
                 <td>{{ forloop.counter }}</td>
+                <td>{{ monthlypricing.name }}</td>
                 <td>{{ monthlypricing.month }}</td>
                 <td>{{ monthlypricing.price }}</td>
                 <td>

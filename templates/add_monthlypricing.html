@@ -48,11 +48,15 @@
     <h2>Add Months Duration</h2>
     {% csrf_token %}
     <div class="form-group">
-        <label for="id_full_name">Mounth:</label>
+        <label for="id_name">Name:</label>
+        {{ form.name }}
+    </div>
+    <div class="form-group">
+        <label for="id_month">Month:</label>
         {{ form.month }}
     </div>
     <div class="form-group">
-        <label for="id_registration_date">Price:</label>
+        <label for="id_price">Price:</label>
         {{ form.price }}
     </div>
     <button type="submit">Add</button>

@@ -4,7 +4,7 @@ from .models import Student, Trainer, MonthlyPricing, Bar, BarSold
 class MonthlyPricingForm(forms.ModelForm):
     class Meta:
         model = MonthlyPricing
-        fields = ['month', 'price']
+        fields = ['name', 'month', 'price']
 
 class StudentForm(forms.ModelForm):
     class Meta:
