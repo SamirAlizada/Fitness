@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 class MonthlyPricing(models.Model):

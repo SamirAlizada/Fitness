@@ -261,10 +261,10 @@ def about(request):
 # ----------------------------------------------------------------
 
 def renew_student(request, student_id):
-    # İlgili öğrenciyi bul
+    # Find the relevant student
     student = get_object_or_404(Student, id=student_id)
     
-    # Registration_date'i güncel tarihe ayarla
+    # Set registration_date to the current date
     student.registration_date = timezone.now()
     
     # end_date'i registration_date'in üzerine ay ekleyerek yenile
@@ -273,5 +273,5 @@ def renew_student(request, student_id):
     # Değişiklikleri kaydet
     student.save()
 
-    # Yenilenmiş öğrenciyle ilgili bir sayfaya veya listeleme sayfasına yönlendir
+    # Redirect to an updated student related page or listing page
     return redirect('student_panel')
