@@ -18,6 +18,7 @@
             <tr>
                 <th scope="col">№</th>
                 <th scope="col">Product Name</th>
+                <th scope="col">Date</th>
                 <th scope="col">Price</th>
                 <th scope="col">Count</th>
                 <th scope="col">Operations</th>
@@ -28,6 +29,7 @@
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ bar_sold.product_name }}</td>
+                <td>{{ bar_sold.date|date:"d/m/Y" }}</td>
                 <td>{{ bar_sold.price }} $</td>
                 <td>{{ bar_sold.count }}</td>
                 <td>

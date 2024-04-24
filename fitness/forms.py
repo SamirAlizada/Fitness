@@ -24,4 +24,4 @@ class BarForm(forms.ModelForm):
 class BarSoldForm(forms.ModelForm):
     class Meta:
         model = BarSold
-        fields = ['product_name', 'price', 'count']
+        fields = ['product_name', 'date', 'price', 'count']

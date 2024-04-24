@@ -65,6 +65,7 @@ class Bar(models.Model):
     
 class BarSold(models.Model):
     product_name = models.ForeignKey(Bar, on_delete=models.CASCADE, null=True, blank=True)
+    date = models.DateField(default=timezone.now)
     price = models.FloatField()
     count = models.IntegerField()
 
