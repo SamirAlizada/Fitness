@@ -235,7 +235,7 @@ def bar_sold_panel(request):
     return render(request, 'bar_sold_panel.html', {'bar_solds': bar_solds})
 
 def monthlypricing_panel(request):
-    monthlypricings = MonthlyPricing.objects.all()
+    monthlypricings = MonthlyPricing.objects.all().order_by('price')
     return render(request, 'monthlypricing_panel.html', {'monthlypricings': monthlypricings})
 # ----------------------------------------------------------------
 
