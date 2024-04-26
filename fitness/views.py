@@ -267,7 +267,7 @@ def renew_student(request, student_id):
     # Set registration_date to the current date
     student.registration_date = timezone.now()
     
-    # end_date'i registration_date'in üzerine ay ekleyerek yenile
+    # Update end_date by adding month above registration_date
     student.end_date = student.registration_date + relativedelta(months=student.months_duration.month)
 
     # Değişiklikleri kaydet
