@@ -83,7 +83,7 @@ def trainer_list(request):
 #     return render(request, 'student_list.html', {'students': students, 'today': today})
 
 def student_list(request):
-    # Öğrencileri `registration_date` alanına göre aylara böler
+    # Divides students into months based on ``registration_date''
     today = date.today()
 
     students_by_month = Student.objects.annotate(
@@ -92,7 +92,7 @@ def student_list(request):
         count=Count('id')
     ).order_by('month')
 
-    # Her ay için öğrencileri gruplandırın
+    # Group students for each month
     grouped_students = {}
     for student in Student.objects.all():
         month = student.registration_date.strftime('%Y-%m')
@@ -100,9 +100,8 @@ def student_list(request):
             grouped_students[month] = []
         grouped_students[month].append(student)
 
-    # `student_list_by_month.html` şablonuna `grouped_students` verisini ilet
+    # Pass the `grouped_students` data to the `student_list_by_month.html` template
     return render(request, 'student_list.html', {'grouped_students': grouped_students, 'today': today, 'month': month})
-
 
 def daily_student_list(request):
     now = datetime.now()
@@ -230,15 +229,25 @@ def trainer_panel(request):
     return render(request, 'trainer_panel.html', {'trainers': trainers})
 
 def student_panel(request):
-    students = Student.objects.all()
-
-    query = request.GET.get('q')
-    if query:
-        students = students.filter(full_name__icontains=query)
-
+    # Divides students into months based on ``registration_date''
     today = date.today()
 
-    return render(request, 'student_panel.html', {'students': students, 'today': today})
+    students_by_month = Student.objects.annotate(
+        month=TruncMonth('registration_date')
+    ).values('month').annotate(
+        count=Count('id')
+    ).order_by('month')
+
+    # Group students for each month
+    grouped_students = {}
+    for student in Student.objects.all():
+        month = student.registration_date.strftime('%Y-%m')
+        if month not in grouped_students:
+            grouped_students[month] = []
+        grouped_students[month].append(student)
+
+    # Pass the `grouped_students` data to the `student_list_by_month.html` template
+    return render(request, 'student_panel.html', {'grouped_students': grouped_students, 'today': today, 'month': month})
 
 def bar_panel(request):
     bars = Bar.objects.all()

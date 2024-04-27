@@ -23,6 +23,8 @@
             </a>
         </div>
     </form>
+    {% for month, students in grouped_students.items %}
+        <h3>{{ month }}</h3>
     <table class="table text-center">
         <thead>
             <tr>
@@ -55,6 +57,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% endfor %}
 </div>
 
 <br>
