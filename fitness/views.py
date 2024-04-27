@@ -71,17 +71,6 @@ def trainer_list(request):
 
     return render(request, 'trainer_list.html', {'trainers': trainers})
 
-# def student_list(request):
-#     students = Student.objects.all()
-
-#     query = request.GET.get('q')
-#     if query:
-#         students = students.filter(full_name__icontains=query)
-
-#     today = date.today()
-
-#     return render(request, 'student_list.html', {'students': students, 'today': today})
-
 def student_list(request):
     # Divides students into months based on ``registration_date''
     today = date.today()
@@ -101,8 +90,11 @@ def student_list(request):
             grouped_students[month] = []
         grouped_students[month].append(student)
 
+    # Sort months in descending order (desc)
+    sorted_grouped_students = dict(sorted(grouped_students.items(), key=lambda x: x[0], reverse=True))
+
     # Pass the `grouped_students` data to the `student_list.html` template
-    return render(request, 'student_list.html', {'grouped_students': grouped_students, 'today': today, 'month': month})
+    return render(request, 'student_list.html', {'grouped_students': sorted_grouped_students, 'today': today, 'month': month})
 
 def daily_student_list(request):
     now = datetime.now()
@@ -248,8 +240,11 @@ def student_panel(request):
             grouped_students[month] = []
         grouped_students[month].append(student)
 
+    # Sort months in descending order (desc)
+    sorted_grouped_students = dict(sorted(grouped_students.items(), key=lambda x: x[0], reverse=True))
+
     # Pass the `grouped_students` data to the `student_panel.html` template
-    return render(request, 'student_panel.html', {'grouped_students': grouped_students, 'today': today, 'month': month})
+    return render(request, 'student_panel.html', {'grouped_students': sorted_grouped_students, 'today': today, 'month': month})
 
 def bar_panel(request):
     bars = Bar.objects.all()
@@ -305,7 +300,7 @@ def renew_student(request, student_id):
     # Update end_date by adding month above registration_date
     student.end_date = student.registration_date + relativedelta(months=student.months_duration.month)
 
-    # Değişiklikleri kaydet
+    # Save changes
     student.save()
 
     # Redirect to an updated student related page or listing page
