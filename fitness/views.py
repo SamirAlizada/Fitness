@@ -82,19 +82,35 @@ def student_list(request):
     if query:
         students = students.filter(full_name__icontains=query)
 
-    # Group students for each month
-    grouped_students = {}
+    # Create a dictionary for grouping students by month
+    grouped_students_dict = {}
     for student in students:
-        month = student.registration_date.strftime('%Y-%m')
-        if month not in grouped_students:
-            grouped_students[month] = []
-        grouped_students[month].append(student)
+        # Extract month and year from `registration_date`
+        month_key = student.registration_date.strftime('%Y-%m')
+        month_display = student.registration_date.strftime('%B %Y')
+        # Group students by year-month key
+        if month_key not in grouped_students_dict:
+            grouped_students_dict[month_key] = {
+                'display': month_display,
+                'students': []
+            }
+        grouped_students_dict[month_key]['students'].append(student)
 
-    # Sort months in descending order (desc)
-    sorted_grouped_students = dict(sorted(grouped_students.items(), key=lambda x: x[0], reverse=True))
+    # Convert the dictionary to a list of tuples for sorting
+    sorted_grouped_students_list = sorted(
+        grouped_students_dict.items(),
+        key=lambda x: x[0],
+        reverse=True
+    )
+
+    # Create a dictionary with the sorted list
+    sorted_grouped_students_dict = {
+        item[1]['display']: item[1]['students']
+        for item in sorted_grouped_students_list
+    }
 
     # Pass the `grouped_students` data to the `student_list.html` template
-    return render(request, 'student_list.html', {'grouped_students': sorted_grouped_students, 'today': today, 'month': month})
+    return render(request, 'student_list.html', {'grouped_students': sorted_grouped_students_dict, 'today': today})
 
 def daily_student_list(request):
     now = datetime.now()
