@@ -6,6 +6,8 @@ from datetime import datetime, date
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
+from django.db.models import Count
+from django.db.models.functions import TruncMonth
 
 # Add
 def add_monthlypricing(request):
@@ -69,16 +71,38 @@ def trainer_list(request):
 
     return render(request, 'trainer_list.html', {'trainers': trainers})
 
+# def student_list(request):
+#     students = Student.objects.all()
+
+#     query = request.GET.get('q')
+#     if query:
+#         students = students.filter(full_name__icontains=query)
+
+#     today = date.today()
+
+#     return render(request, 'student_list.html', {'students': students, 'today': today})
+
 def student_list(request):
-    students = Student.objects.all()
-
-    query = request.GET.get('q')
-    if query:
-        students = students.filter(full_name__icontains=query)
-
+    # Öğrencileri `registration_date` alanına göre aylara böler
     today = date.today()
 
-    return render(request, 'student_list.html', {'students': students, 'today': today})
+    students_by_month = Student.objects.annotate(
+        month=TruncMonth('registration_date')
+    ).values('month').annotate(
+        count=Count('id')
+    ).order_by('month')
+
+    # Her ay için öğrencileri gruplandırın
+    grouped_students = {}
+    for student in Student.objects.all():
+        month = student.registration_date.strftime('%Y-%m')
+        if month not in grouped_students:
+            grouped_students[month] = []
+        grouped_students[month].append(student)
+
+    # `student_list_by_month.html` şablonuna `grouped_students` verisini ilet
+    return render(request, 'student_list.html', {'grouped_students': grouped_students, 'today': today, 'month': month})
+
 
 def daily_student_list(request):
     now = datetime.now()
