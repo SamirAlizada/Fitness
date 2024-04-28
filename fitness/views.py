@@ -6,8 +6,6 @@ from datetime import datetime, date
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
-from django.db.models import Count
-from django.db.models.functions import TruncMonth
 
 # Add
 def add_monthlypricing(request):
