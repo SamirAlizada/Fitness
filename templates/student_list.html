@@ -1,6 +1,17 @@
 {% include "index.html" %}
 
 {% block content %}
+
+<style>
+    .end-date-today {
+        color: red;
+    }
+
+    .end-date-past {
+        color: grey;
+    }
+</style>
+
 <div class="container mt-5">
     <h2 class="mb-4">Student List</h2>
     <form method="GET" class="mb-3">
