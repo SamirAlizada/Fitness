@@ -132,7 +132,7 @@ def bar_list(request):
     return render(request, 'bar_list.html', {'bars': bars})
 
 def bar_sold_list(request):
-    # Divides students into months based on ``date''
+    # Divides bar_solds into months based on ``date''
     today = date.today()
 
     query = request.GET.get('q')
@@ -142,13 +142,13 @@ def bar_sold_list(request):
     if query:
         bar_solds = bar_solds.filter(product_name__icontains=query)
 
-    # Create a dictionary for grouping students by month
+    # Create a dictionary for grouping bar_solds by month
     grouped_bar_solds_dict = {}
     for bar_sold in bar_solds:
-        # Extract month and year from `registration_date`
+        # Extract month and year from `date`
         month_key = bar_sold.date.strftime('%Y-%m')
         month_display = bar_sold.date.strftime('%B %Y')
-        # Group students by year-month key
+        # Group bar_solds by year-month key
         if month_key not in grouped_bar_solds_dict:
             grouped_bar_solds_dict[month_key] = {
                 'display': month_display,
@@ -169,7 +169,7 @@ def bar_sold_list(request):
         for item in sorted_grouped_bar_solds_list
     }
 
-    # Pass the `grouped_students` data to the `student_list.html` template
+    # Pass the `grouped_bar_solds` data to the `bar_sold_list.html` template
     return render(request, 'bar_sold_list.html', {'grouped_bar_solds': sorted_grouped_bar_solds_list, 'today': today})
 # ----------------------------------------------------------------
 
@@ -318,13 +318,45 @@ def bar_panel(request):
     return render(request, 'bar_panel.html', {'bars': bars})
 
 def bar_sold_panel(request):
-    bar_solds = BarSold.objects.all()
+    # Divides bar_solds into months based on ``date''
+    today = date.today()
 
     query = request.GET.get('q')
+
+    bar_solds = BarSold.objects.all()
+
     if query:
         bar_solds = bar_solds.filter(product_name__icontains=query)
 
-    return render(request, 'bar_sold_panel.html', {'bar_solds': bar_solds})
+    # Create a dictionary for grouping bar_solds by month
+    grouped_bar_solds_dict = {}
+    for bar_sold in bar_solds:
+        # Extract month and year from `date`
+        month_key = bar_sold.date.strftime('%Y-%m')
+        month_display = bar_sold.date.strftime('%B %Y')
+        # Group bar_solds by year-month key
+        if month_key not in grouped_bar_solds_dict:
+            grouped_bar_solds_dict[month_key] = {
+                'display': month_display,
+                'bar_solds': []
+            }
+        grouped_bar_solds_dict[month_key]['bar_solds'].append(bar_sold)
+
+    # Convert the dictionary to a list of tuples for sorting
+    sorted_grouped_bar_solds_list = sorted(
+        grouped_bar_solds_dict.items(),
+        key=lambda x: x[0],
+        reverse=True
+    )
+
+    # Create a dictionary with the sorted list
+    sorted_grouped_bar_solds_list = {
+        item[1]['display']: item[1]['bar_solds']
+        for item in sorted_grouped_bar_solds_list
+    }
+
+    # Pass the `grouped_bar_solds` data to the `bar_sold_list.html` template
+    return render(request, 'bar_sold_panel.html', {'grouped_bar_solds': sorted_grouped_bar_solds_list, 'today': today})
 
 def monthlypricing_panel(request):
     monthlypricings = MonthlyPricing.objects.all().order_by('price')
