@@ -13,6 +13,8 @@
             </a>
         </div>
     </form>
+    {% for month, bar_solds in grouped_bar_solds.items %}
+    <h3>{{ month }}</h3>
     <table class="table text-center">
         <thead>
             <tr>
@@ -35,6 +37,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% endfor %}
 </div>
 
 <br>
