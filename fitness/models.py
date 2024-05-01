@@ -42,7 +42,7 @@ class Student(models.Model):
         self.payment = payment
 
     def calculate_end_date(self):
-        # Registration_date üzerine months_duration kadar ay ekleyerek end_date hesaplama
+        # Calculation of end_date by adding months to months_duration on registration_date
         if self.months_duration:
             self.end_date = self.registration_date + relativedelta(months=self.months_duration.month)
 
