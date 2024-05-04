@@ -29,11 +29,16 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ bar.product_name }}</td>
                 <td>{{ bar.price }}</td>
-                <td>{{ bar.stock_number }}</td>
+                <td>
+                    <a href="{% url 'increase_stock' bar.pk %}" class="btn btn-sm btn-success">+</a>
+                    {{ bar.stock_number }}
+                    <a href="{% url 'decrease_stock' bar.pk %}" class="btn btn-sm btn-warning">-</a>
+                </td>
                 <td>
                     <a href="{% url 'update_bar' bar.pk %}" class="btn btn-sm btn-info">Edit</a>
                     <a href="{% url 'delete_bar' bar.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this bar item?')">Delete</a>
                 </td>
+                    
             </tr>
             {% endfor %}
         </tbody>

@@ -42,4 +42,6 @@ urlpatterns = [
     path('logout/', user_logout, name='logout'),
 
     path('renew-student/<int:student_id>/', renew_student, name='renew_student'),
+    path('increase/<int:bar_id>/', increase_stock, name='increase_stock'),
+    path('decrease/<int:bar_id>/', decrease_stock, name='decrease_stock'),
 ]

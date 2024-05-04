@@ -69,46 +69,100 @@ def trainer_list(request):
 
     return render(request, 'trainer_list.html', {'trainers': trainers})
 
+# def student_list(request):
+#     # Divides students into months based on ``registration_date''
+#     today = date.today()
+
+#     query = request.GET.get('q')
+
+#     students = Student.objects.all()
+
+#     if query:
+#         students = students.filter(full_name__icontains=query)
+
+#     # Create a dictionary for grouping students by month
+#     grouped_students_dict = {}
+#     for student in students:
+#         # Extract month and year from `registration_date`
+#         month_key = student.registration_date.strftime('%Y-%m')
+#         month_display = student.registration_date.strftime('%B %Y')
+#         # Group students by year-month key
+#         if month_key not in grouped_students_dict:
+#             grouped_students_dict[month_key] = {
+#                 'display': month_display,
+#                 'students': []
+#             }
+#         grouped_students_dict[month_key]['students'].append(student)
+
+#     # Convert the dictionary to a list of tuples for sorting
+#     sorted_grouped_students_list = sorted(
+#         grouped_students_dict.items(),
+#         key=lambda x: x[0],
+#         reverse=True
+#     )
+
+#     # Create a dictionary with the sorted list
+#     sorted_grouped_students_dict = {
+#         item[1]['display']: item[1]['students']
+#         for item in sorted_grouped_students_list
+#     }
+
+#     # Pass the `grouped_students` data to the `student_list.html` template
+#     return render(request, 'student_list.html', {'grouped_students': sorted_grouped_students_dict, 'today': today})
+
 def student_list(request):
-    # Divides students into months based on ``registration_date''
     today = date.today()
 
+    # Arama sorgusunu al
     query = request.GET.get('q')
 
+    # Tüm öğrencileri al veya arama sorgusunu filtrele
     students = Student.objects.all()
-
     if query:
         students = students.filter(full_name__icontains=query)
 
-    # Create a dictionary for grouping students by month
+    # Öğrencileri aylara göre gruplayacak sözlük
     grouped_students_dict = {}
+    grouped_payments_dict = {}  # Aylık toplam ödemeleri tutacak sözlük
+
+    # Öğrencileri ay anahtarına göre gruplandırma ve ödemeleri toplama
     for student in students:
-        # Extract month and year from `registration_date`
+        # Kayıt tarihinden ay ve yıl anahtarını oluştur
         month_key = student.registration_date.strftime('%Y-%m')
         month_display = student.registration_date.strftime('%B %Y')
-        # Group students by year-month key
+
+        # Ay anahtarına göre gruplandırma
         if month_key not in grouped_students_dict:
             grouped_students_dict[month_key] = {
                 'display': month_display,
                 'students': []
             }
-        grouped_students_dict[month_key]['students'].append(student)
+            grouped_payments_dict[month_key] = 0  # Aylık ödemelerin toplamı
 
-    # Convert the dictionary to a list of tuples for sorting
+        grouped_students_dict[month_key]['students'].append(student)
+        
+        # Öğrencinin ödemesini toplam ödemeye ekleyin
+        grouped_payments_dict[month_key] += student.payment
+
+    # Sözlüğü listeye dönüştürme ve anahtara göre ters sırayla sıralama
     sorted_grouped_students_list = sorted(
         grouped_students_dict.items(),
         key=lambda x: x[0],
         reverse=True
     )
 
-    # Create a dictionary with the sorted list
+    # Sıralı listeyi sözlüğe dönüştürme
     sorted_grouped_students_dict = {
         item[1]['display']: item[1]['students']
         for item in sorted_grouped_students_list
     }
 
-    # Pass the `grouped_students` data to the `student_list.html` template
-    return render(request, 'student_list.html', {'grouped_students': sorted_grouped_students_dict, 'today': today})
+    # Şablona verileri gönderme
+    return render(request, 'student_list.html', {
+        'grouped_students': sorted_grouped_students_dict,
+        'grouped_payments': grouped_payments_dict,
+        'today': today,
+    })
 
 def daily_student_list(request):
     now = datetime.now()
@@ -399,3 +453,18 @@ def renew_student(request, student_id):
 
     # Redirect to an updated student related page or listing page
     return redirect('student_panel')
+
+def increase_stock(request, bar_id):
+    bar = get_object_or_404(Bar, pk=bar_id)
+    bar.stock_number += 1
+    bar.save()
+    return redirect('bar_panel')
+
+def decrease_stock(request, bar_id):
+    bar = get_object_or_404(Bar, pk=bar_id)
+    # stock_number'ı azaltmadan önce kontrol etmek için
+    # herhangi bir stok kontrolü (örneğin, negatif değer önleme) ekleyebilirsiniz
+    if bar.stock_number > 0:
+        bar.stock_number -= 1
+        bar.save()
+    return redirect('bar_panel')
