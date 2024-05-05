@@ -454,6 +454,9 @@ def renew_student(request, student_id):
     # Redirect to an updated student related page or listing page
     return redirect('student_panel')
 
+# ----------------------------------------------------------------
+
+# Operations
 def increase_stock(request, bar_id):
     bar = get_object_or_404(Bar, pk=bar_id)
     bar.stock_number += 1
@@ -462,9 +465,27 @@ def increase_stock(request, bar_id):
 
 def decrease_stock(request, bar_id):
     bar = get_object_or_404(Bar, pk=bar_id)
-    # stock_number'ı azaltmadan önce kontrol etmek için
-    # herhangi bir stok kontrolü (örneğin, negatif değer önleme) ekleyebilirsiniz
+    # to check before reducing stock_number
+    # you can add any stock control (for example, negative value prevention).
     if bar.stock_number > 0:
         bar.stock_number -= 1
         bar.save()
     return redirect('bar_panel')
+
+def increase_sold(request, bar_sold_id):
+    bar_sold = get_object_or_404(BarSold, pk=bar_sold_id)
+    # Artış miktarını belirleyin
+    increase_amount = 1  # Artış miktarı, gerektiğinde özelleştirilebilir
+    bar_sold.count += increase_amount
+    bar_sold.price += bar_sold.unit_price * increase_amount  # `unit_price` değişkenini tanımlayın.
+    bar_sold.save()
+    return redirect('bar_sold_panel')
+
+def decrease_sold(request, bar_id):
+    bar_sold = get_object_or_404(BarSold, pk=bar_id)
+    # to check before reducing stock_number
+    # you can add any stock control (for example, negative value prevention).
+    if bar_sold.count > 0:
+        bar_sold.count -= 1
+        bar_sold.save()
+    return redirect('bar_sold_panel')

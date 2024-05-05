@@ -34,7 +34,9 @@
                 <td>{{ bar_sold.product_name }}</td>
                 <td>{{ bar_sold.date|date:"d/m/Y" }}</td>
                 <td>{{ bar_sold.price }} $</td>
-                <td>{{ bar_sold.count }}</td>
+                <td>
+                    <a href="{% url 'increase_sold' bar_sold.pk %}" class="btn btn-sm btn-success">+</a>
+                    {{ bar_sold.count }}</td>
                 <td>
                     <a href="{% url 'update_bar_sold' bar_sold.pk %}" class="btn btn-sm btn-info">Edit</a>
                     <a href="{% url 'delete_bar_sold' bar_sold.pk %}" class="btn btn-sm btn-danger"
