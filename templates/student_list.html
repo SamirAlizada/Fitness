@@ -23,8 +23,20 @@
             </a>
         </div>
     </form>
-    {% for month, students in grouped_students.items %}
-        <h3>{{ month }}</h3>
+    {% for month, data in grouped_students.items %}
+    <!-- <h3>{{ month }} - Total Payment: {{ data.total_payment }} $</h3> -->
+    <div class="row">
+        <div class="col-md-6 text-left">
+            <h4>
+                {{ month }}
+            </h4>
+        </div>
+        <div class="col-md-6 text-right">
+            <h4>
+                Total Payment: {{ data.total_payment }} $
+            </h4>
+        </div>
+    </div>
         <table class="table text-center mb-5">
             <thead>
                 <tr>
@@ -38,7 +50,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for student in students %}
+                {% for student in data.students %}
                     <tr class="{% if student.end_date == today %}end-date-today{% elif student.end_date < today %}end-date-past{% endif %}">
                         <td>{{ forloop.counter }}</td>
                         <td>{{ student.full_name }}</td>
