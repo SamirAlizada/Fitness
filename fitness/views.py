@@ -70,7 +70,6 @@ def trainer_list(request):
     return render(request, 'trainer_list.html', {'trainers': trainers})
 
 def student_list(request):
-    from datetime import date
     today = date.today()
 
     # Retrieve the search query
@@ -284,7 +283,6 @@ def trainer_panel(request):
     return render(request, 'trainer_panel.html', {'trainers': trainers})
 
 def student_panel(request):
-    # Divides students into months based on ``registration_date''
     today = date.today()
 
     query = request.GET.get('q')
@@ -304,9 +302,15 @@ def student_panel(request):
         if month_key not in grouped_students_dict:
             grouped_students_dict[month_key] = {
                 'display': month_display,
-                'students': []
+                'students': [],
+                'total_payment': 0  # Track total monthly payments
             }
+        
+        # Add the student to the corresponding month's group
         grouped_students_dict[month_key]['students'].append(student)
+
+        # Add the student's payment to the total payment for the month
+        grouped_students_dict[month_key]['total_payment'] += student.payment
 
     # Convert the dictionary to a list of tuples for sorting
     sorted_grouped_students_list = sorted(
@@ -315,14 +319,19 @@ def student_panel(request):
         reverse=True
     )
 
-    # Create a dictionary with the sorted list
+    # Convert sorted list back to dictionary
     sorted_grouped_students_dict = {
-        item[1]['display']: item[1]['students']
+        item[1]['display']: {
+            'students': item[1]['students'],
+            'total_payment': item[1]['total_payment']
+        }
         for item in sorted_grouped_students_list
     }
 
     # Pass the `grouped_students` data to the `student_list.html` template
-    return render(request, 'student_panel.html', {'grouped_students': sorted_grouped_students_dict, 'today': today})
+    return render(request, 'student_panel.html', {
+        'grouped_students': sorted_grouped_students_dict,
+        'today': today})
 
 def bar_panel(request):
     bars = Bar.objects.all()
