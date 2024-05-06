@@ -45,6 +45,7 @@ urlpatterns = [
     path('increase/<int:bar_id>/', increase_stock, name='increase_stock'),
     path('decrease/<int:bar_id>/', decrease_stock, name='decrease_stock'),
 
-    path('increase/<int:bar_sold_id>/', increase_sold, name='increase_sold'),
+    path('bar-sold-increase/<int:pk>/', increase_sold, name='increase_sold'),
+    path('bar-sold-decrease/<int:pk>/', decrease_sold, name='decrease_sold'),
 
 ]

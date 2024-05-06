@@ -472,17 +472,14 @@ def decrease_stock(request, bar_id):
         bar.save()
     return redirect('bar_panel')
 
-def increase_sold(request, bar_sold_id):
-    bar_sold = get_object_or_404(BarSold, pk=bar_sold_id)
-    # Artış miktarını belirleyin
-    increase_amount = 1  # Artış miktarı, gerektiğinde özelleştirilebilir
-    bar_sold.count += increase_amount
-    bar_sold.price += bar_sold.unit_price * increase_amount  # `unit_price` değişkenini tanımlayın.
+def increase_sold(request, pk):
+    bar_sold = get_object_or_404(BarSold, pk=pk)
+    bar_sold.count += 1
     bar_sold.save()
     return redirect('bar_sold_panel')
 
-def decrease_sold(request, bar_id):
-    bar_sold = get_object_or_404(BarSold, pk=bar_id)
+def decrease_sold(request, pk):
+    bar_sold = get_object_or_404(BarSold, pk=pk)
     # to check before reducing stock_number
     # you can add any stock control (for example, negative value prevention).
     if bar_sold.count > 0:
