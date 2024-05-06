@@ -343,11 +343,12 @@ def bar_panel(request):
     return render(request, 'bar_panel.html', {'bars': bars})
 
 def bar_sold_panel(request):
-    # Divides bar_solds into months based on ``date''
     today = date.today()
 
+    # Retrieve the search query
     query = request.GET.get('q')
 
+    # Get all bar_solds or filter based on the search query
     bar_solds = BarSold.objects.all()
 
     if query:
@@ -359,13 +360,23 @@ def bar_sold_panel(request):
         # Extract month and year from `date`
         month_key = bar_sold.date.strftime('%Y-%m')
         month_display = bar_sold.date.strftime('%B %Y')
+
+        # Calculate the sale amount for the bar_sold
+        sale_amount = bar_sold.count * bar_sold.price
+
         # Group bar_solds by year-month key
         if month_key not in grouped_bar_solds_dict:
             grouped_bar_solds_dict[month_key] = {
                 'display': month_display,
-                'bar_solds': []
+                'bar_solds': [],
+                'total_sales': 0  # Initialize total monthly sales
             }
+
+        # Add the bar_sold to the corresponding month's group
         grouped_bar_solds_dict[month_key]['bar_solds'].append(bar_sold)
+
+        # Add the bar_sold's sale amount to the total sales for the month
+        grouped_bar_solds_dict[month_key]['total_sales'] += sale_amount
 
     # Convert the dictionary to a list of tuples for sorting
     sorted_grouped_bar_solds_list = sorted(
@@ -374,14 +385,20 @@ def bar_sold_panel(request):
         reverse=True
     )
 
-    # Create a dictionary with the sorted list
-    sorted_grouped_bar_solds_list = {
-        item[1]['display']: item[1]['bar_solds']
+    # Convert the sorted list back to a dictionary
+    sorted_grouped_bar_solds_dict = {
+        item[1]['display']: {
+            'bar_solds': item[1]['bar_solds'],
+            'total_sales': item[1]['total_sales']
+        }
         for item in sorted_grouped_bar_solds_list
     }
 
-    # Pass the `grouped_bar_solds` data to the `bar_sold_list.html` template
-    return render(request, 'bar_sold_panel.html', {'grouped_bar_solds': sorted_grouped_bar_solds_list, 'today': today})
+    # Pass the `grouped_bar_solds` data to the `bar_sold_panel.html` template
+    return render(request, 'bar_sold_panel.html', {
+        'grouped_bar_solds': sorted_grouped_bar_solds_dict,
+        'today': today,
+    })
 
 def monthlypricing_panel(request):
     monthlypricings = MonthlyPricing.objects.all().order_by('price')
