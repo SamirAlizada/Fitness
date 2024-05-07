@@ -154,9 +154,10 @@ def bar_sold_list(request):
 
     # Get all bar_solds or filter based on the search query
     bar_solds = BarSold.objects.all()
-
+    
     if query:
-        bar_solds = bar_solds.filter(product_name__icontains=query)
+        bar_solds = bar_solds.filter(product_name__name__icontains=query)
+
 
     # Create a dictionary for grouping bar_solds by month
     grouped_bar_solds_dict = {}
@@ -198,7 +199,7 @@ def bar_sold_list(request):
         for item in sorted_grouped_bar_solds_list
     }
 
-    # Pass the `grouped_bar_solds` data to the `bar_sold_panel.html` template
+    # Pass the `grouped_bar_solds` data to the `bar_sold_list.html` template
     return render(request, 'bar_sold_list.html', {
         'grouped_bar_solds': sorted_grouped_bar_solds_dict,
         'today': today,

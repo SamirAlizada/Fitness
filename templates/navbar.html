@@ -40,10 +40,10 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'daily_student_list' %}">Daily</a>
-                            <a class="dropdown-item" href="{% url 'bar_list' %}">Bar Stock</a>
-                            <a class="dropdown-item" href="{% url 'bar_sold_list' %}">Bar Sold</a>
                             <a class="dropdown-item" href="{% url 'trainer_list' %}">Trainer</a>
                             <a class="dropdown-item" href="{% url 'student_list' %}">Student</a>
+                            <a class="dropdown-item" href="{% url 'bar_list' %}">Bar Stock</a>
+                            <a class="dropdown-item" href="{% url 'bar_sold_list' %}">Bar Sold</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -72,11 +72,11 @@
                             Panel
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'monthlypricing_panel' %}">Month</a>
                             <a class="dropdown-item" href="{% url 'trainer_panel' %}">Trainer</a>
                             <a class="dropdown-item" href="{% url 'student_panel' %}">Student</a>
-                            <a class="dropdown-item" href="{% url 'bar_panel' %}">Bar</a>
+                            <a class="dropdown-item" href="{% url 'bar_panel' %}">Bar Stock</a>
                             <a class="dropdown-item" href="{% url 'bar_sold_panel' %}">Bar Sold</a>
-                            <a class="dropdown-item" href="{% url 'monthlypricing_panel' %}">Monthly Price</a>
                         </div>
                     </li>
                     <li class="nav-item">
