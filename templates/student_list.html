@@ -1,7 +1,6 @@
 {% include "index.html" %}
 
 {% block content %}
-
 <style>
     .end-date-today {
         color: red;
@@ -14,54 +13,89 @@
 
 <div class="container mt-5">
     <h2 class="mb-4">Student List</h2>
-    <form method="GET" class="mb-3">
-        <div class="form-inline mb-4">
-            <input type="text" name="q" class="form-control mr-sm-2" placeholder="Enter a search name">
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-            &nbsp;
-            <a href="{% url 'student_list' %}"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Reset</button>
-            </a>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="GET" class="mb-3">
+                <div class="form-inline mb-4">
+                    <input type="text" name="q" class="form-control mr-sm-2" placeholder="Enter a search name">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+                    &nbsp;
+                    <a href="{% url 'student_list' %}"><button class="btn btn-outline-primary my-2 my-sm-0"
+                            type="submit">Reset</button>
+                    </a>
+                </div>
+            </form>
         </div>
-    </form>
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal" data-target="#warningModal">
+                Upcoming End Dates
+            </button>
+        </div>
+    </div>
     {% for month, data in grouped_students.items %}
     <div class="row">
         <div class="col-md-6 text-left">
-            <h4>
-                {{ month }}
-            </h4>
+            <h4>{{ month }}</h4>
         </div>
         <div class="col-md-6 text-right">
-            <h4>
-                Total Payment: {{ data.total_payment }} $
-            </h4>
+            <h4>Total Payment: {{ data.total_payment }} $</h4>
         </div>
     </div>
-        <table class="table text-center mb-5">
-            <thead>
-                <tr>
-                    <th scope="col">№</th>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Registration Date</th>
-                    <th scope="col">End Date</th>
-                    <th scope="col">Months</th>
-                    <th scope="col">Trainer</th>
-                    <th scope="col">Payment</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for student in data.students %}
-                    <tr class="{% if student.end_date == today %}end-date-today{% elif student.end_date < today %}end-date-past{% endif %}">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ student.full_name }}</td>
-                        <td>{{ student.registration_date|date:"d/m/Y" }}</td>
-                        <td>{{ student.end_date|date:"d/m/Y" }}</td>
-                        <td>{{ student.months_duration }}</td>
-                        <td>{{ student.trainer }}</td>
-                        <td>{{ student.payment }} $</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <table class="table text-center mb-5">
+        <thead>
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Registration Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Months</th>
+                <th scope="col">Trainer</th>
+                <th scope="col">Payment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in data.students %}
+            <tr
+                class="{% if student.end_date == today %}end-date-today{% elif student.end_date < today %}end-date-past{% endif %}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ student.full_name }}</td>
+                <td>{{ student.registration_date|date:"d/m/Y" }}</td>
+                <td>{{ student.end_date|date:"d/m/Y" }}</td>
+                <td>{{ student.months_duration }}</td>
+                <td>{{ student.trainer }}</td>
+                <td>{{ student.payment }} $</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% endfor %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="warningModalLabel">Upcoming End Dates</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        {% for student in students_near_end_date %}
+                        <li>{{ student.full_name }} - End Date: {{ student.end_date|date:"d/m/Y" }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock content %}

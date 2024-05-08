@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import StudentForm, TrainerForm, MonthlyPricingForm, BarForm, BarSoldForm
 from .models import Student, Trainer, Bar, MonthlyPricing, BarSold
 from django.contrib import messages
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
@@ -69,12 +69,68 @@ def trainer_list(request):
 
     return render(request, 'trainer_list.html', {'trainers': trainers})
 
+# def student_list(request):
+#     today = date.today()
+
+#     # Retrieve the search query
+#     query = request.GET.get('q')
+
+#     # Get all students or filter based on the search query
+#     students = Student.objects.all()
+#     if query:
+#         students = students.filter(full_name__icontains=query)
+
+#     # Dictionary to group students by month
+#     grouped_students_dict = {}
+
+#     # Grouping students by month key and calculating monthly total payments
+#     for student in students:
+#         # Create month and year key from the registration date
+#         month_key = student.registration_date.strftime('%Y-%m')
+#         month_display = student.registration_date.strftime('%B %Y')
+
+#         # Group by month key
+#         if month_key not in grouped_students_dict:
+#             grouped_students_dict[month_key] = {
+#                 'display': month_display,
+#                 'students': [],
+#                 'total_payment': 0  # Track total monthly payments
+#             }
+
+#         # Add the student to the corresponding month's group
+#         grouped_students_dict[month_key]['students'].append(student)
+
+#         # Add the student's payment to the total payment for the month
+#         grouped_students_dict[month_key]['total_payment'] += student.payment
+
+#     # Convert dictionary to a list and sort by key in descending order
+#     sorted_grouped_students_list = sorted(
+#         grouped_students_dict.items(),
+#         key=lambda x: x[0],
+#         reverse=True
+#     )
+
+#     # Convert sorted list back to dictionary
+#     sorted_grouped_students_dict = {
+#         item[1]['display']: {
+#             'students': item[1]['students'],
+#             'total_payment': item[1]['total_payment']
+#         }
+#         for item in sorted_grouped_students_list
+#     }
+
+#     # Pass the data to the template
+#     return render(request, 'student_list.html', {
+#         'grouped_students': sorted_grouped_students_dict,
+#         'today': today,
+#     })
+
 def student_list(request):
     today = date.today()
-
+    
     # Retrieve the search query
     query = request.GET.get('q')
-
+    
     # Get all students or filter based on the search query
     students = Student.objects.all()
     if query:
@@ -119,10 +175,16 @@ def student_list(request):
         for item in sorted_grouped_students_list
     }
 
+    # Filter students whose end_date is within one week from today
+    students_near_end_date = students.filter(
+        end_date__range=(today, today + timedelta(days=7))
+    ).order_by('end_date')  # Sort by end_date in ascending order
+
     # Pass the data to the template
     return render(request, 'student_list.html', {
         'grouped_students': sorted_grouped_students_dict,
         'today': today,
+        'students_near_end_date': students_near_end_date,
     })
 
 def daily_student_list(request):
