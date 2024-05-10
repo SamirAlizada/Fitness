@@ -9,7 +9,7 @@ class MonthlyPricingForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['full_name', 'registration_date', 'months_duration', 'trainer']
+        fields = ['full_name', 'registration_date', 'daily', 'months_duration', 'trainer']
 
 class TrainerForm(forms.ModelForm):
     class Meta:

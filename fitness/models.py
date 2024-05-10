@@ -19,26 +19,35 @@ class Trainer(models.Model):
     def __str__(self) -> str:
         return f"{self.full_name}"
 
+class DailyPricing(models.Model):
+    name = models.CharField(max_length=30, null=True)
+    price = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
 class Student(models.Model):
     full_name = models.CharField(max_length=100)
     registration_date = models.DateField(default=timezone.now)
     months_duration = models.ForeignKey(MonthlyPricing, on_delete=models.CASCADE, null=True, blank=True)
+    daily = models.ForeignKey(DailyPricing, on_delete=models.CASCADE, null=True, blank=True)
     trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, null=True, blank=True)
     payment = models.IntegerField(default=0)
     end_date = models.DateField(null=True, blank=True)
-    
+
     def calculate_payment(self):
-        # Get the price if `months_duration` is selected
-        if self.months_duration:
-            payment = self.months_duration.price
-        else:
-            payment = 0.0
+        payment = 0.0  # Initially, the payment is reset
 
-        # If an instructor is selected, multiply the instructor's student_fee by `months_duration'
-        if self.trainer:
-            payment += self.trainer.student_fee * self.months_duration.month
+        if self.daily is not None:
+            payment += self.daily.price  # Add the daily price
 
-        # Update the `payment' field
+        if self.months_duration is not None:
+            payment += self.months_duration.price  # Add the monthly price
+            
+            if self.trainer:
+                payment += self.trainer.student_fee * self.months_duration.month
+        
+        # Update the payment in the `payment` variable
         self.payment = payment
 
     def calculate_end_date(self):
