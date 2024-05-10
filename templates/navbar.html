@@ -59,6 +59,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'add_monthlypricing' %}">Month</a>
+                            <a class="dropdown-item" href="{% url 'add_dailypricing' %}">Daily</a>
                             <a class="dropdown-item" href="{% url 'add_trainer' %}">Trainer</a>
                             <a class="dropdown-item" href="{% url 'add_student' %}">Student</a>
                             <a class="dropdown-item" href="{% url 'add_bar' %}">Bar Stock</a>
@@ -73,6 +74,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'monthlypricing_panel' %}">Month</a>
+                            <a class="dropdown-item" href="{% url 'dailypricing_panel' %}">Daily</a>
                             <a class="dropdown-item" href="{% url 'trainer_panel' %}">Trainer</a>
                             <a class="dropdown-item" href="{% url 'student_panel' %}">Student</a>
                             <a class="dropdown-item" href="{% url 'bar_panel' %}">Bar Stock</a>
