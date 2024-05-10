@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import StudentForm, TrainerForm, MonthlyPricingForm, BarForm, BarSoldForm
-from .models import Student, Trainer, Bar, MonthlyPricing, BarSold
+from .forms import StudentForm, TrainerForm, MonthlyPricingForm, BarForm, BarSoldForm, DailyPricingForm
+from .models import Student, Trainer, Bar, MonthlyPricing, BarSold, DailyPricing
 from django.contrib import messages
 from datetime import datetime, date, timedelta
 from django.contrib.auth import authenticate, login, logout
@@ -17,6 +17,16 @@ def add_monthlypricing(request):
     else:
         form = MonthlyPricingForm()
     return render(request, 'add_monthlypricing.html', {'form': form})
+
+def add_dailypricing(request):
+    if request.method == 'POST':
+        form = DailyPricingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('add_dailypricing') 
+    else:
+        form = DailyPricingForm()
+    return render(request, 'add_dailypricing.html', {'form': form})
 
 def add_student(request):
     if request.method == 'POST':
@@ -68,62 +78,6 @@ def trainer_list(request):
         trainers = trainers.filter(full_name__icontains=query)
 
     return render(request, 'trainer_list.html', {'trainers': trainers})
-
-# def student_list(request):
-#     today = date.today()
-
-#     # Retrieve the search query
-#     query = request.GET.get('q')
-
-#     # Get all students or filter based on the search query
-#     students = Student.objects.all()
-#     if query:
-#         students = students.filter(full_name__icontains=query)
-
-#     # Dictionary to group students by month
-#     grouped_students_dict = {}
-
-#     # Grouping students by month key and calculating monthly total payments
-#     for student in students:
-#         # Create month and year key from the registration date
-#         month_key = student.registration_date.strftime('%Y-%m')
-#         month_display = student.registration_date.strftime('%B %Y')
-
-#         # Group by month key
-#         if month_key not in grouped_students_dict:
-#             grouped_students_dict[month_key] = {
-#                 'display': month_display,
-#                 'students': [],
-#                 'total_payment': 0  # Track total monthly payments
-#             }
-
-#         # Add the student to the corresponding month's group
-#         grouped_students_dict[month_key]['students'].append(student)
-
-#         # Add the student's payment to the total payment for the month
-#         grouped_students_dict[month_key]['total_payment'] += student.payment
-
-#     # Convert dictionary to a list and sort by key in descending order
-#     sorted_grouped_students_list = sorted(
-#         grouped_students_dict.items(),
-#         key=lambda x: x[0],
-#         reverse=True
-#     )
-
-#     # Convert sorted list back to dictionary
-#     sorted_grouped_students_dict = {
-#         item[1]['display']: {
-#             'students': item[1]['students'],
-#             'total_payment': item[1]['total_payment']
-#         }
-#         for item in sorted_grouped_students_list
-#     }
-
-#     # Pass the data to the template
-#     return render(request, 'student_list.html', {
-#         'grouped_students': sorted_grouped_students_dict,
-#         'today': today,
-#     })
 
 def student_list(request):
     today = date.today()
@@ -318,6 +272,16 @@ def update_monthlypricing(request, pk):
             form.save()
             return redirect('monthlypricing_panel')
     return render(request, 'update_monthlypricing.html', {'form': form})
+
+def update_dailypricing(request, pk):
+    dailypricing = get_object_or_404(DailyPricing, pk=pk)
+    form = DailyPricingForm(instance=dailypricing)
+    if request.method == 'POST':
+        form = DailyPricingForm(request.POST, instance=dailypricing)
+        if form.is_valid():
+            form.save()
+            return redirect('dailypricing_panel')
+    return render(request, 'update_dailypricing.html', {'form': form})
 # ----------------------------------------------------------------
 
 # Delete
@@ -350,6 +314,12 @@ def delete_monthlypricing(request, pk):
     monthlypricing.delete()
     messages.success(request, 'Monthly Pricing deleted successfully.')
     return redirect('monthlypricing_panel')
+
+def delete_dailypricing(request, pk):
+    dailypricing = DailyPricing.objects.get(pk=pk)
+    dailypricing.delete()
+    messages.success(request, 'Daily Pricing deleted successfully.')
+    return redirect('dailypricing_panel')
 # ----------------------------------------------------------------
 
 # Panel
@@ -483,6 +453,10 @@ def bar_sold_panel(request):
 def monthlypricing_panel(request):
     monthlypricings = MonthlyPricing.objects.all().order_by('price')
     return render(request, 'monthlypricing_panel.html', {'monthlypricings': monthlypricings})
+
+def dailypricing_panel(request):
+    dailypricings = DailyPricing.objects.all().order_by('price')
+    return render(request, 'dailypricing_panel.html', {'dailypricings': dailypricings})
 # ----------------------------------------------------------------
 
 # User

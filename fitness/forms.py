@@ -1,10 +1,15 @@
 from django import forms
-from .models import Student, Trainer, MonthlyPricing, Bar, BarSold
+from .models import Student, Trainer, MonthlyPricing, Bar, BarSold, DailyPricing
 
 class MonthlyPricingForm(forms.ModelForm):
     class Meta:
         model = MonthlyPricing
         fields = ['name', 'month', 'price']
+
+class DailyPricingForm(forms.ModelForm):
+    class Meta:
+        model = DailyPricing
+        fields = ['name', 'price']
 
 class StudentForm(forms.ModelForm):
     class Meta:
