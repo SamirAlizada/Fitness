@@ -484,14 +484,20 @@ def renew_student(request, student_id):
     # Find the relevant student
     student = get_object_or_404(Student, id=student_id)
     
-    # Set registration_date to the current date
-    student.registration_date = timezone.now()
+    # Create a new student object with the same attributes
+    new_student = Student(
+        full_name=student.full_name,
+        registration_date=timezone.now(),
+        months_duration=student.months_duration,
+        entrance=student.entrance,
+        trainer=student.trainer,
+        payment=student.payment,
+        # Assuming the duration field is in months
+        end_date=timezone.now() + relativedelta(months=student.months_duration.month)
+    )
     
-    # Update end_date by adding month above registration_date
-    student.end_date = student.registration_date + relativedelta(months=student.months_duration.month)
-
-    # Save changes
-    student.save()
+    # Save the new student object
+    new_student.save()
 
     # Redirect to an updated student related page or listing page
     return redirect('student_panel')
