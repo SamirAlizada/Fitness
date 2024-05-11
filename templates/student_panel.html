@@ -56,7 +56,14 @@
                 <td>{{ student.full_name }}</td>
                 <td>{{ student.registration_date|date:"d/m/Y" }}</td>
                 <td>{{ student.end_date|date:"d/m/Y" }}</td>
+                
+                <!-- A condition that checks for `daily` instead of `months_duration` -->
+                {% if student.months_duration %}
                 <td>{{ student.months_duration }}</td>
+                {% else %}
+                <td>{{ student.daily }}</td> <!-- If `months_duration` is not present, `daily` is printed -->
+                {% endif %}
+
                 <td>{{ student.trainer }}</td>
                 <td>{{ student.payment }} $</td>
                 <td>
