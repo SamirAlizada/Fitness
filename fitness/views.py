@@ -489,7 +489,6 @@ def renew_student(request, student_id):
         full_name=student.full_name,
         registration_date=timezone.now(),
         months_duration=student.months_duration,
-        entrance=student.entrance,
         trainer=student.trainer,
         payment=student.payment,
         # Assuming the duration field is in months
